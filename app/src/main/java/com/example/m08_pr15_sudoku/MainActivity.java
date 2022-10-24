@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.Toast;
 
 import java.util.Arrays;
 
@@ -53,12 +54,15 @@ public class MainActivity extends AppCompatActivity {
                         // la posició del spinner és 'i', però també es pot buscar amb
                         String string = spinner.getSelectedItem().toString();
                         Log.i("INFO","Spinner modificat");
+                        int fila = (int) adapterView.getTag(R.id.fila);
+                        int col = (int) adapterView.getTag(R.id.col);
+                        Toast.makeText(getApplicationContext(),"Spinner "+fila+","+col+" modificat",Toast.LENGTH_SHORT).show();
                     }
                     @Override public void onNothingSelected(AdapterView<?> adapterView) {} //Ignore
                 });
                 //Tags spinner
-                //spinner.setTag(R.id.fila,fila);
-                //spinner.setTag(R.id.col,col);
+                spinner.setTag(R.id.fila,a);
+                spinner.setTag(R.id.col,b);
                 //Insercio spinner
                 row.addView(spinner);
             }
