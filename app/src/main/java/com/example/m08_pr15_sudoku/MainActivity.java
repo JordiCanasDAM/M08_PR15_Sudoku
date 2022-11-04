@@ -26,7 +26,9 @@ public class MainActivity extends AppCompatActivity {
         String[] nombres = {"▣","1","2","3","4","5","6","7","8","9"};
 
         //Creacio taulell
-
+        Spinner[][] spinners = new Spinner[9][9];
+        int rowNum = 0;
+        int colNum = 0;
         TableLayout table = findViewById(R.id.table);
         //Files
         for (int a = 0; a<9; a++){
@@ -63,9 +65,12 @@ public class MainActivity extends AppCompatActivity {
                 //Tags spinner
                 spinner.setTag(R.id.fila,a);
                 spinner.setTag(R.id.col,b);
-                //Insercio spinner
+                //Insercio spinner a array
+                spinners[rowNum][colNum] = spinner;
+                colNum++;
                 row.addView(spinner);
             }
+            rowNum++;
             table.addView(row);
         }//Fi creacio taulell
 
