@@ -1,5 +1,7 @@
 package com.example.m08_pr15_sudoku;
 
+import android.util.Log;
+
 import java.util.Random;
 
 public class SudokuModel {
@@ -25,12 +27,15 @@ public class SudokuModel {
     //comprovaFila : comprova que la fila indicada als paràmetres compleix
     // les normes del Sudoku.
     public boolean comprovaFila(int row){
-        boolean valid = true;
-        for (int a : cells[row]){//per cada fila
-            for (int b : cells[row]){
-                if (a == b){valid = false;};
+        Boolean valid = true;
+        for (int a = 0; a<cells[row].length; a++){
+            for (int b = 0; b<cells[row].length; b++){
+                if (a != b && cells[row][a] != 0){
+                    if (cells[row][a] == cells[row][b]){valid = false; Log.i("ROW","NO");}
+                }
             }
         }
+        Log.i("ROW","YES");
         return valid;
     }
 
@@ -39,9 +44,12 @@ public class SudokuModel {
         boolean valid = true;
         for (int a = 0; a < cells.length; a++){
             for (int b = 0; b < cells.length; b++){
-                if (cells[a][col] == cells[b][col]){valid = false;}
+                if (a != b && cells[b][col] != 0){
+                    if (cells[a][col] == cells[b][col]){valid = false;Log.i("COL","NO");}
+                }
             }
         }
+        Log.i("COL","YES");
         return valid;
     }
 
@@ -69,14 +77,20 @@ public class SudokuModel {
         }
         //Comprova els valors del quadrant
         for (int a = minRow; a < minRow+3 ; a++){
-            for (int b = minCol; b < minCol + 3; b++){
-                for (int a1 = minRow; a1 < minRow+3 ; a1++){
-                    for (int b1 = minCol; b1 < minCol + 3; b1++){
-                        if (cells[a][b] == cells[a1][b1]){valid = false;}
+            for (int b = minCol; b < minCol + 3; b++) {
+                for (int a1 = minRow; a1 < minRow + 3; a1++) {
+                    for (int b1 = minCol; b1 < minCol + 3; b1++) {
+                        if (a != a1 && b != b1 && cells[a][b] != 0) {
+                            if (cells[a][b] == cells[a1][b1]) {
+                                Log.i("Quad", "NO");
+                                valid = false;
+                            }
+                        }
                     }
                 }
             }
         }
+        Log.i("Quad", "YES");
         return valid;
     }
 
@@ -86,14 +100,20 @@ public class SudokuModel {
     public void creaPartida(){
         Random rng = new Random();
         int numsIntroduits = rng.nextInt(100-1);
+        Log.i("Inputs",String.valueOf(numsIntroduits));
         int row = 0;
         int col = 0;
         int val = 0;
-        for (int a = 0; a < (numsIntroduits+1); a++){
+        for (int a = 0; a < numsIntroduits; a++){
             row = rng.nextInt(9-1);
             col = rng.nextInt(9-1);
             val = rng.nextInt(9-1)+1;
-            while (setVal(row,col,val) == -1){};
+            setVal(row,col,val);
+            while (setVal(row,col,val) == -1){
+                Log.i("INFO","Regenerant nombre");
+                row = rng.nextInt(9-1);
+                col = rng.nextInt(9-1);
+            }
         }
     }
 

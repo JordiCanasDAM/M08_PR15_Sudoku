@@ -16,6 +16,11 @@ import android.widget.Toast;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
+    //Taulell spinners
+    static Spinner[][] spinners = new Spinner[9][9];
+
+    //Creacio del model
+    SudokuModel model = new SudokuModel();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,13 +31,13 @@ public class MainActivity extends AppCompatActivity {
         String[] nombres = {"▣","1","2","3","4","5","6","7","8","9"};
 
         //Creacio taulell
-        Spinner[][] spinners = new Spinner[9][9];
         int rowNum = 0;
         int colNum = 0;
         TableLayout table = findViewById(R.id.table);
         //Files
         for (int a = 0; a<9; a++){
             TableRow row = new TableRow(this);
+            colNum = 0;
             for (int b = 0; b<9; b++){
                 //Spinner
                 Spinner spinner = new Spinner(this);
@@ -58,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.i("INFO","Spinner modificat");
                         int fila = (int) adapterView.getTag(R.id.fila);
                         int col = (int) adapterView.getTag(R.id.col);
-                        Toast.makeText(getApplicationContext(),"Spinner "+fila+","+col+" modificat",Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(),"Spinner "+fila+","+col+" modificat",Toast.LENGTH_SHORT).show();
                     }
                     @Override public void onNothingSelected(AdapterView<?> adapterView) {} //Ignore
                 });
@@ -73,8 +78,31 @@ public class MainActivity extends AppCompatActivity {
             rowNum++;
             table.addView(row);
         }//Fi creacio taulell
+        Log.i("INFO", "Creant partida");
+        model.creaPartida();
+        for (int a = 0; a < model.cells.length; a++){
+            for (int b = 0; b < model.cells[a].length; b++){
+                if (model.cells[a][b] != 0){
+                    spinners[a][b].setEnabled(false);
+                }
+            }
+        }
+        Log.i("INFO", "Partida creada");
+        Log.i("INFO", "Refrescant GUI");
+        refrescaGUI(model, nombres);
+        Log.i("INFO","Loading complete");
 
+    }//onCreate
 
-
+    public void refrescaGUI(SudokuModel model, String[] spinnerOpts){
+        for (int a = 0; a < model.cells.length; a++){
+            for (int b = 0; b < model.cells[a].length; b++) {
+                if (model.cells[a][b] != 0) {
+                    spinners[a][b].setSelection(Arrays.asList(spinnerOpts).indexOf(String.valueOf(model.cells[a][b])));
+                    Log.i("Value", String.valueOf(Arrays.asList(spinnerOpts).indexOf(String.valueOf(model.cells[a][b]))));
+                }
+            }
+        }
     }
+
 }
